@@ -66,9 +66,10 @@ public class Player:MonoBehaviour{
     {
         StartCoroutine(Steal());
     }
+
     IEnumerator Steal()
     {
-        foreach (Slot s in hand)
+        foreach (Slot s in cardsOnBoard)
         {
             if (s.isOccupied)
             {

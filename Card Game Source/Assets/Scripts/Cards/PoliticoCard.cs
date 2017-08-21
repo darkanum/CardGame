@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class PoliticoCard : Card {
 
     public Transform propriedades;
-    public TextMesh textMesh_Custo;
-    public TextMesh textMesh_Rouba;
+
+    public TextMeshPro textMesh_Custo;
+    public TextMeshPro textMesh_Rouba;
+    //public TextMesh textMesh_Custo;
+    //public TextMesh textMesh_Rouba;
 
     public int custo;
     public int rouba;

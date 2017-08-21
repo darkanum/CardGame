@@ -34,7 +34,7 @@ public class Description : MonoBehaviour {
     void Update () {
         Vector2 pos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(myCanvas.transform as RectTransform, Input.mousePosition, myCanvas.worldCamera, out pos);
-        panel.transform.position = myCanvas.transform.TransformPoint(pos);
+        panel.transform.position = myCanvas.transform.TransformPoint(pos) + new Vector3(100, 50);
     }
     
     public void Show(string s)

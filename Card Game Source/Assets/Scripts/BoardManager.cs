@@ -11,16 +11,22 @@ public class BoardManager : MonoBehaviour {
     public Transform graveyard;
     public Transform bufunfa;
     public Transform cueca;
-
-    [SerializeField]
-    private List<Slot> player1_hand;
-    [SerializeField]
-    private List<Slot> player2_hand;
+    
     [SerializeField]
     private List<AnimatedProp> bufunfas;
     [SerializeField]
     private List<AnimatedProp> cuecaList;
     int cuecaIndex = 0;
+
+    public enum Pile
+    {
+        Deck,
+        Hand,
+        Cemitery
+    }
+
+    public Player player1;
+    public Player player2;
 
     private void Awake()
     {
@@ -65,18 +71,6 @@ public class BoardManager : MonoBehaviour {
 		
 	}
 
-    public Transform GetHandPosition()
-    {
-        foreach(Slot s in player1_hand)
-        {
-            if (!s.isOccupied)
-            {
-                return s.Position;
-            }
-        }
-        return graveyard;
-    }
-
     public void Doar(float valor)
     {
         AnimatedProp t = bufunfas[bufunfas.Count - 1];
@@ -93,10 +87,3 @@ public class BoardManager : MonoBehaviour {
     }
 }
 
-[System.Serializable]
-public class Slot
-{
-    public Transform Position;
-    public bool isOccupied;
-    Card m_card;
-}

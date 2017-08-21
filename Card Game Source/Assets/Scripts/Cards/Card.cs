@@ -31,7 +31,7 @@ public class Card : MonoBehaviour {
     public Sprite m_sprite;
     public Sprite m_art;
     public Transform m_position;
-
+    public Player m_player;
     public string description;
 
     public virtual void Setup()
@@ -42,12 +42,14 @@ public class Card : MonoBehaviour {
         transform.DOMove(BoardManager.m_instance.deck.position, 0.5f, false).SetEase(Ease.InOutQuad);
     }
 
-    public virtual void DrawCard()
+    public virtual void DrawCard( Slot slot)
     {
         m_state = State.onHand;
         m_spriteRenderer.sprite = m_sprite;
         m_artSpriteRenderer.sprite = m_art;
-        m_position = BoardManager.m_instance.GetHandPosition();
+        m_position = slot.Position;
+        slot.isOccupied = true;
+        slot.m_card = this;
         transform.DOMove(m_position.position, 0.5f, false).SetEase(Ease.InOutQuad);
 
     }
@@ -78,28 +80,47 @@ public class Card : MonoBehaviour {
 
     public void OnMouseEnter()
     {
-        if(m_state == State.onBoard || m_state == State.onHand)
+        if (m_state == State.onBoard || m_state == State.onHand && !isDragging)
+        {
+            transform.DOScale(0.6f, 0.15f);
             Description.m_instance.Show(description);
+        }
     }
 
-    public void OnMouseOver()
+
+    public bool isDragging;
+    public void OnMouseDrag()
     {
-        ShowDescription();
+        if (m_state == State.onHand)
+        {
+            isDragging = true;
+            Vector2 cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = cursorPosition;
+            Description.m_instance.Hide();
+            transform.GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
+    public virtual void OnMouseUp()
+    {
+        if (isDragging)
+        {
+            transform.DOMove(m_position.position, 0.25f, false).SetEase(Ease.InOutQuad).OnComplete(SetDraggingFalse);
+
+        }
+    }
+    
+    private void SetDraggingFalse()
+    {
+        isDragging = false;
+        transform.GetComponent<BoxCollider2D>().enabled = true ;
+    }
     public void OnMouseExit()
     {
         if (m_state == State.onBoard || m_state == State.onHand)
+        {
             Description.m_instance.Hide();
-    }
-
-    public void ShowDescription()
-    {
-
-    }
-
-    public void HideDescription()
-    {
-
+            transform.DOScale(0.5f, 0.15f);
+        }
     }
 }
